@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: utc-transformer
+  labels:
+    app: utc-transformer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: utc-transformer
+  template:
+    metadata:
+      labels:
+        app: utc-transformer
+    spec:
+      containers:
+      - name: utc-transformer-ctr
+        image: timokraus/utc-transformer:latest
+        imagePullPolicy: Always

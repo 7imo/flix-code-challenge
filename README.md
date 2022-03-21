@@ -79,3 +79,5 @@ The output messages will appear in UTC time at the output_topic consumer:
 * {"myKey": 3, "myTimestamp": "2022-03-01T08:13:12+00:00"}
 * {"myKey": 4, "myTimestamp": ""}
 * {"myKey": 5, "myTimestamp": "2022-03-01T08:14:05+00:00"}
+
+To stop the application, just delete the Deployment or scale the number of replicas to zero.

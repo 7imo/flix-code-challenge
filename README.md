@@ -1,5 +1,5 @@
 # flix-code-challenge
-Flixbus Code Challenge Repo
+Flixbus Code Challenge Repo (done on a Mac)
 
 ## Setup Minikube
 ```
@@ -15,6 +15,9 @@ brew install kubectl
 brew install helm
 ```
 ## Setup Kafka (and Zookeeper)
+
+Reference: https://docs.bitnami.com/tutorials/deploy-scalable-kafka-zookeeper-cluster-kubernetes/ 
+
 ```
 helm repo add bitnami https://charts.bitnami.com/bitnami
 ```
@@ -44,10 +47,32 @@ kubectl --namespace default exec -it $POD_NAME -- kafka-topics.sh --create --boo
 
 ### Start a Kafka message consumer to test the setup
 ```
-kubectl --namespace default exec -it $POD_NAME -- kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic input_topic
+kubectl --namespace default exec -it $POD_NAME -- kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic output_topic
 ``` 
 
 ### Start a Kafka message producer to test the setup
 ```
 kubectl --namespace default exec -it $POD_NAME -- kafka-console-producer.sh --broker-list localhost:9092 --topic input_topic
-``` 
+```
+
+## Deploy the Transformer Application
+
+```
+kubectl apply -f Deployment.yaml
+```
+
+To test the application, go to your console window where you started the input_topic producer and insert the test data manually:
+
+* {"myKey": 1, "myTimestamp": "2022-03-01T09:11:04+01:00"}
+* {"myKey": 2, "myTimestamp": "2022-03-01T09:12:08+01:00"}
+* {"myKey": 3, "myTimestamp": "2022-03-01T09:13:12+01:00"}
+* {"myKey": 4, "myTimestamp": ""}
+* {"myKey": 5, "myTimestamp": "2022-03-01T09:14:05+01:00"}
+
+The output messages will appear in UTC time at the output_topic consumer:
+
+* {"myKey": 1, "myTimestamp": "2022-03-01T08:11:04+00:00"}
+* {"myKey": 2, "myTimestamp": "2022-03-01T08:12:08+00:00"}
+* {"myKey": 3, "myTimestamp": "2022-03-01T08:13:12+00:00"}
+* {"myKey": 4, "myTimestamp": ""}
+* {"myKey": 5, "myTimestamp": "2022-03-01T08:14:05+00:00"}

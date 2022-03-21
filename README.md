@@ -57,6 +57,9 @@ kubectl --namespace default exec -it $POD_NAME -- kafka-console-producer.sh --br
 
 ## Deploy the Transformer Application
 
+The docker image is available at https://hub.docker.com/repository/docker/timokraus/utc-transformer 
+
+To deploy it, run:
 ```
 kubectl apply -f Deployment.yaml
 ```
